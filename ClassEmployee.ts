@@ -1,4 +1,4 @@
-import {Person} from "./ClassPerson";// in case of future reorgenization
+import {Person} from "./ClassPerson";// in case of future reorgenization adding import is better
 export class Employee extends Person{
     private id: number;
     private salary: number;
@@ -11,7 +11,7 @@ export class Employee extends Person{
 //------------------------------------------------------------   methods
     public work(){
         console.log("Employee with id "+ this.id+ " is working" );
-        // note wanted to add name but didn't want to add methods without asking
+        // note: wanted to add name but didn't want to add unrequested methods
     }
     public getSalary(){
         return this.salary;
