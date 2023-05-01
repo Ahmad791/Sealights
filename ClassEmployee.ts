@@ -1,5 +1,5 @@
 import {Person} from "./ClassPerson";// in case of future reorgenization
-export class Emplyee extends Person{
+export class Employee extends Person{
     private id: number;
     private salary: number;
 

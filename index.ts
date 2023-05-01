@@ -1,18 +1,34 @@
+import { json } from "body-parser";
 import express, { Application, Request, Response } from "express";
-
+import { Employee } from "./ClassEmployee";
+import { Person } from "./ClassPerson";
+const Joi=require("joi")
 const app: Application = express();
-const port = 5031;
+const port = process.env.PORT || 5031;
 
+var Employees=[new Employee("Employee1",21,1,12000),new Employee("Employee2",23,2,13000)]
+var People=[new Person("person1",21),new Person("Person2",23)]
 // Body parsing Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(
-    "/",
+app.get("/", // checking if the server is live
     async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).send({
             message: "Server working fine",
         });
+    }
+);
+
+app.get("/Employees", //get all Employees
+    async (req: Request, res: Response): Promise<Response> => {
+        return res.status(200).send(JSON.stringify(Employees));
+    }
+);
+
+app.get("/People", //get all People
+    async (req: Request, res: Response): Promise<Response> => {
+        return res.status(200).send(JSON.stringify(People));
     }
 );
 
