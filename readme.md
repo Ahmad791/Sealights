@@ -14,3 +14,5 @@ I've already modefied the script in package.json, to start the server run:
     npm run start
 
 The default port is 5031 (chose it randomly so it will probably won't be in use), however you can change it by changing the environment "PORT" variable.
+
+you can test it by running "localhost:5031/", "localhost:5031/People", localhost:5031/Employees" in your postman.
