@@ -15,7 +15,5 @@ export class Employee extends Person{
     public getSalary(){
         return this.salary;
     }
-    public getId(){
-        return this.EmployeeId;//usually for employees the Empoyee ID is more important, using it can get entire object
-    }
+    //note overrding the getId might break the addEmployee since it checks if employee with "id" exists, recomended to add different function
 }

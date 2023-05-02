@@ -1,24 +1,27 @@
 import { json } from "body-parser";
 import express, { Application, Request, Response } from "express";
-import { x } from "joi";
+import Joi from "joi";
 import { Employee } from "./ClassEmployee";
 import { Person } from "./ClassPerson";
-const Joi=require("joi")// sill be useful in bonus tasks
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
-//Joi schemas for checking inputs
-const getPerson=Joi.object({name:Joi.string().alphanum().required(),age:Joi.number().integer()});
-const getEmployee=Joi.object({id:Joi.number().integer()});
+// Every API sends the parameters to other function as sting and it gets changed there to
+// JSON when needed, 
 
+//Joi schemas for checking inputs
+const getPersonSchema=Joi.object({id:Joi.number().integer().required()});
+const addPersonSchema=Joi.object({id:Joi.number().integer().required(),name:Joi.string().alphanum().required(),age:Joi.number().integer().required()});
+const addEmployeeSchema=Joi.object({id:Joi.number().integer().required(),name:Joi.string().alphanum().required(),age:Joi.number().integer().required(),
+salary:Joi.number().integer().required()});
 // Body parsing Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Initializing arrays with preloaded data for testing
-var Employees=new Map([[1,new Employee("Employee1",21,3,12000,1)],[2,new Employee("Employee2",23,5,13000,2)]]);
-var People=new Map([[23,new Person(23,"person1",21)],[23,new Person(15,"Person2",23)]]);
-var Ecount=3;//employee count for when adding a new one
+var Employees=new Map<number,Employee>([[1,new Employee("Employee1",21,3,12000,1)],[2,new Employee("Employee2",23,5,13000,2)]]);
+var People=new Map([[23,new Person(23,"person1",21)],[15,new Person(15,"Person2",23)]]);
+var Ecount=Employees.size+1;//employee count for when adding a new one
 
 
 app.get("/", // checking if the server is live
@@ -31,92 +34,92 @@ app.get("/", // checking if the server is live
 
 app.get("/Employees", //get all Employees
     async (req: Request, res: Response): Promise<Response> => {
-        return res.status(200).send([Employees.values()]);
+        return res.status(200).send([...Employees.values()]);
     }
 );
 
 app.get("/People", //get all People
     async (req: Request, res: Response): Promise<Response> => {
-        return res.status(200).send(JSON.parse(JSON.stringify(People.entries())));
+        return res.status(200).send([...People.values()]);
     }
 );
 //---------------------------------------------------------------------Bonus methods
-function checkGetValidity(req:Request,arr:Map<number,Person>){//check if the get requests validity
-    const valid=getEmployee.validate(req.params);
+function checkGetValidity(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){//check if the get requests validity, 
+//to use send data as JSON stringified, array to search for duplicity and the Joi schema
+    const valid=schema.validate(JSON.parse(data));//check if input valid according to schema sent
         if(valid.error){//check if input is valid 
             return {code:400,message:valid.error.message};
         }
         const r=arr.get(parseInt(valid.value.id));
-        if(r) return {code:200,message:JSON.parse(JSON.stringify(r))};// check if Employee exists
+        if(r) return {code:200,message:JSON.parse(JSON.stringify(r))};// check if Employee exists and return it if it does
         return {code:404,message:"Not found"};
 }
 
-function deleteById(req:Request,arr:Map<number,Person>){
-    const x=checkGetValidity(req,arr);
-    if(x.code!=200){ 
+function deleteById(data:string,arr:Map<number,Person>){
+    const x=checkGetValidity(data,arr,getPersonSchema);
+    if(x.code!=200){ //doesn't exist or bad input
         return x;
     }else
-    { arr.delete(parseInt(req.params.id));
+    { arr.delete(parseInt(JSON.parse(data).id));
     return x;
 }
 }
 
-function addById(req:Request,arr:Map<number,Person>){
-    const x=checkGetValidity(req,Employees);
+function addById(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){
+    const x=checkGetValidity(data,arr,schema);
+    if(x.code==400) return x;
+    const d=JSON.parse(data);
     if(x.code==200)return {code:x.code,message:"already exists"}
-    else {Employees.set(parseInt(req.params.id),new Employee("Employee5",21,12,15000,1))
-    return{code:x.code,message:"added"}
-    }
+    else return{code:x.code,message:"added"}
 }
 
 
 //------------------------------------  People APIs
 app.get("/People/:id", //get all People
     async (req: Request, res: Response): Promise<Response> => {
-        const x=checkGetValidity(req,People);
+        const x=checkGetValidity(JSON.stringify(req.params),People,getPersonSchema);
         return res.status(x.code).send(x.message)
     }
 );
 
 app.delete("/People/:id", //Delete specific Person
     async (req: Request, res: Response): Promise<Response> => {
-       const x=deleteById(req,People);
+       const x=deleteById(JSON.stringify(req.params),People);
        if(x.code==200) return res.status(200).send("Person deleted");
        else return res.status(x.code).send(x.message);
     }
 );
 
-app.post("/People/:id", //add specific employee
+app.post("/People/add", //add specific employee
     async (req: Request, res: Response): Promise<Response> => {
-        const x=addById(req,People);
-        return res.status(x.code).send(x.message);
+        const x=addById(JSON.stringify(req.body),People,addPersonSchema);
+        if(x.code==404)People.set(parseInt(req.body.id),new Person(req.body.id,req.body.name,req.body.age));
+        return res.status(200).send(x.message);
     }
 );
 //------------------------------------  Employees' APIs
 app.get("/Employees/:id", //get specific Employee
         async (req: Request, res: Response): Promise<Response> => {
-        const x=checkGetValidity(req,Employees);
+        const x=checkGetValidity(JSON.stringify(req.params),Employees,getPersonSchema);
         return res.status(x.code).send(x.message)
     }
 );
 
 app.delete("/Employees/:id", //Delete specific employee
     async (req: Request, res: Response): Promise<Response> => {
-       const x=deleteById(req,Employees);
-       if(x.code==200) return res.status(200).send("Employee deleted");
+       const x=deleteById(JSON.stringify(req.params),Employees);
+       if(x.code===200) return res.status(200).send("Employee deleted");
        else return res.status(x.code).send(x.message);
     }
 );
 
-app.post("/Employees/:id", //add specific employee
+app.post("/Employees/add", //add specific employee
     async (req: Request, res: Response): Promise<Response> => {
-        const x=addById(req,Employees);
-        return res.status(x.code).send(x.message);
+        const x=addById(JSON.stringify(req.body),Employees,addEmployeeSchema);
+        if(x.code==404)Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
+        return res.status(200).send(x.message);
     }
 );
-
-
-
 
 
 try {
