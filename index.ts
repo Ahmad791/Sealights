@@ -1,14 +1,16 @@
 import { json } from "body-parser";
+import { count } from "console";
 import express, { Application, Request, Response } from "express";
 import Joi from "joi";
 import { Employee } from "./ClassEmployee";
+import { Logger } from "./ClassLogger";
 import { Person } from "./ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
 // Every API sends the parameters to other function as sting and it gets changed there to
 // JSON when needed, 
-
+const l=new Logger();
 //Joi schemas for checking inputs
 const getPersonSchema=Joi.object({id:Joi.number().integer().required()});
 const addPersonSchema=Joi.object({id:Joi.number().integer().required(),name:Joi.string().alphanum().required(),age:Joi.number().integer().required()});
@@ -70,7 +72,7 @@ function addById(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){
     if(x.code==400) return x;
     const d=JSON.parse(data);
     if(x.code==200)return {code:x.code,message:"already exists"}
-    else return{code:x.code,message:"added"}
+    else return{code:x.code,message:"added"}//doesn't exist, return to parent function to add object
 }
 
 
@@ -117,7 +119,8 @@ app.post("/Employees/add", //add specific employee
     async (req: Request, res: Response): Promise<Response> => {
         const x=addById(JSON.stringify(req.body),Employees,addEmployeeSchema);
         if(x.code==404)Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
-        return res.status(200).send(x.message);
+        l.log("the count is :"+Ecount)
+        return res.status(x.code).send(x.message);
     }
 );
 
