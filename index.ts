@@ -1,5 +1,3 @@
-import { json } from "body-parser";
-import { count } from "console";
 import express, { Application, Request, Response } from "express";
 import Joi from "joi";
 import { Employee } from "./ClassEmployee";
@@ -8,8 +6,10 @@ import { Person } from "./ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
-// Every API sends the parameters to other function as sting and it gets changed there to
-// JSON when needed, 
+// Every API sends the parameters to other functions as sting and it gets changed there to
+// JSON when needed. They People and Employees APIs send data to the same function so no need 
+// to change multiple times. For example "checkGetValidity" is responsible for checking data 
+// validity and is almost used in all APIs. Read functions' notes for more info.
 const l=new Logger();
 //Joi schemas for checking inputs
 const getPersonSchema=Joi.object({id:Joi.number().integer().required()});
@@ -46,14 +46,14 @@ app.get("/People", //get all People
     }
 );
 //---------------------------------------------------------------------Bonus methods
-function checkGetValidity(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){//check if the get requests validity, 
-//to use send data as JSON stringified, array to search for duplicity and the Joi schema
+function checkGetValidity(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){//Function for checking data validity according to Joi schemas 
+//to use, send data as JSON stringified, array to search for duplicity and the Joi schema
     const valid=schema.validate(JSON.parse(data));//check if input valid according to schema sent
         if(valid.error){//check if input is valid 
             return {code:400,message:valid.error.message};
         }
         const r=arr.get(parseInt(valid.value.id));
-        if(r) return {code:200,message:JSON.parse(JSON.stringify(r))};// check if Employee exists and return it if it does
+        if(r) return {code:200,message:JSON.parse(JSON.stringify(r))};// check if object exists in provided array and return it if it does
         return {code:404,message:"Not found"};
 }
 
