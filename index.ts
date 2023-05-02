@@ -1,8 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import Joi from "joi";
-import { Employee } from "./ClassEmployee";
-import { Logger } from "./ClassLogger";
-import { Person } from "./ClassPerson";
+import { Employee } from "./classes/ClassEmployee";
+import { Logger } from "./classes/ClassLogger";
+import { Person } from "./classes/ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
