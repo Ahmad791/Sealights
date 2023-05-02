@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import Joi from "joi";
+import Joi, { date } from "joi";
 import { Employee } from "./classes/ClassEmployee";
 import { Logger } from "./classes/ClassLogger";
 import { Person } from "./classes/ClassPerson";
@@ -10,7 +10,6 @@ const port = process.env.PORT || 5031;
 // JSON when needed. They People and Employees APIs send data to the same function so no need 
 // to change multiple times. For example "checkGetValidity" is responsible for checking data 
 // validity and is almost used in all APIs. Read functions' notes for more info.
-const l=new Logger();
 //Joi schemas for checking inputs
 const getPersonSchema=Joi.object({id:Joi.number().integer().required()});
 const addPersonSchema=Joi.object({id:Joi.number().integer().required(),name:Joi.string().alphanum().required(),age:Joi.number().integer().required()});
@@ -24,10 +23,12 @@ app.use(express.urlencoded({ extended: true }));
 var Employees=new Map<number,Employee>([[1,new Employee("Employee1",21,3,12000,1)],[2,new Employee("Employee2",23,5,13000,2)]]);
 var People=new Map([[23,new Person(23,"person1",21)],[15,new Person(15,"Person2",23)]]);
 var Ecount=Employees.size+1;//employee count for when adding a new one
-
+const bufferSize=25;//should warn if map size exceeds this number
+const start=Date.now()
 
 app.get("/", // checking if the server is live
     async (req: Request, res: Response): Promise<Response> => {
+        Logger.info("Pulse checked, live for "+(Date.now()-start)/1000+" seconds and server working fine")
         return res.status(200).send({
             message: "Server working fine",
         });
@@ -77,9 +78,11 @@ function addById(data:string,arr:Map<number,Person>,schema:Joi.ObjectSchema){
 
 
 //------------------------------------  People APIs
-app.get("/People/:id", //get all People
+app.get("/People/:id", //Get specific person
     async (req: Request, res: Response): Promise<Response> => {
         const x=checkGetValidity(JSON.stringify(req.params),People,getPersonSchema);
+        Logger.log("Some log");
+        console.log("log2");
         return res.status(x.code).send(x.message)
     }
 );
@@ -95,7 +98,10 @@ app.delete("/People/:id", //Delete specific Person
 app.post("/People/add", //add specific employee
     async (req: Request, res: Response): Promise<Response> => {
         const x=addById(JSON.stringify(req.body),People,addPersonSchema);
-        if(x.code==404)People.set(parseInt(req.body.id),new Person(req.body.id,req.body.name,req.body.age));
+        if(x.code==404){
+            People.set(parseInt(req.body.id),new Person(req.body.id,req.body.name,req.body.age));
+            if(People.size>=bufferSize) Logger.warn("People size is "+People.size);
+        }
         return res.status(200).send(x.message);
     }
 );
@@ -118,8 +124,10 @@ app.delete("/Employees/:id", //Delete specific employee
 app.post("/Employees/add", //add specific employee
     async (req: Request, res: Response): Promise<Response> => {
         const x=addById(JSON.stringify(req.body),Employees,addEmployeeSchema);
-        if(x.code==404)Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
-        l.log("the count is :"+Ecount)
+        if(x.code==404){
+            Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
+            if(Employees.size>=bufferSize) Logger.warn("Employees size is "+Employees.size);
+        }
         return res.status(x.code).send(x.message);
     }
 );

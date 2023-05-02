@@ -1,8 +1,5 @@
 This is the homework I was assigned to.
 
-To install the Prerequisite you can run: 
-    
-    bash pre.sh
 
 1+2. Made the the Person and Employee classes in ClassPerson.ts ClassEmployee.ts respectively
 In order to test parts 1 and 2 you can run
@@ -10,6 +7,9 @@ In order to test parts 1 and 2 you can run
     ts-node tests.ts
     
 I've used the npm package "ts-node" which is very useful for running ts code and testing it
+you can install it easily using
+
+    npm install ts-node-dev --save-dev
 
 3. Installed express and made 3 seperate get requests "/","/People","/Employees" for the tasks checking if server is live , get all people, get all employees respectively.
 
