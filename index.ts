@@ -7,10 +7,6 @@ import { Person } from "./classes/ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
-const url = process.env.REDIS_URL || 'redis://localhost:6111';
-const redisClient = createClient({
-    url
-});
 
 // Every API sends the parameters to other functions as sting and it gets changed there to
 // JSON when needed. They People and Employees APIs send data to the same function so no need 
@@ -36,7 +32,7 @@ app.get("/", // checking if the server is live
     async (req: Request, res: Response): Promise<Response> => {
         Logger.info("Pulse checked, live for "+(Date.now()-start)/1000+" seconds and server working fine")
         return res.status(200).send({
-            message: "Server working fine" + " redis is " +redisClient.isReady,
+            message: "Server working fine",
         });
     }
 );
