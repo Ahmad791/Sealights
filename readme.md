@@ -1,12 +1,13 @@
 This is the homework I was assigned to.
 
+note: Try not to change anything before reading the comments in the file, a lot of things depend on other things. The code is easily expandable but some minor changes can cause some functions not to work properly, reading all comments and understanding the structure before changing is advised.
+
 First you should run the following command to install all dependencies in package.json
 
     npm install
 
-
 1+2. Made the the Person and Employee classes in ClassPerson.ts ClassEmployee.ts respectively
-In order to test parts 1 and 2 you can run
+In order to test parts 1 and 2 you can run (note: Employee inherets from Person)
     
     ts-node tests.ts
     
