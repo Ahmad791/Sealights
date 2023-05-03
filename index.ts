@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import Joi, { date } from "joi";
+import Joi from "joi";
 import { Employee } from "./classes/ClassEmployee";
 import { Logger } from "./classes/ClassLogger";
 import { Person } from "./classes/ClassPerson";
@@ -100,9 +100,10 @@ app.post("/People/add", //add specific employee
         const x=addById(JSON.stringify(req.body),People,addPersonSchema);
         if(x.code==404){
             People.set(parseInt(req.body.id),new Person(req.body.id,req.body.name,req.body.age));
+            x.code=200;
             if(People.size>=bufferSize) Logger.warn("People size is "+People.size);
         }
-        return res.status(200).send(x.message);
+        return res.status(x.code).send(x.message);
     }
 );
 //------------------------------------  Employees' APIs
@@ -126,6 +127,7 @@ app.post("/Employees/add", //add specific employee
         const x=addById(JSON.stringify(req.body),Employees,addEmployeeSchema);
         if(x.code==404){
             Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
+            x.code=200;
             if(Employees.size>=bufferSize) Logger.warn("Employees size is "+Employees.size);
         }
         return res.status(x.code).send(x.message);

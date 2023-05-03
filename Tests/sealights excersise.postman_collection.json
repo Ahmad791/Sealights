@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "11e299a7-d183-430b-b0a7-1e8e7c62a173",
+		"name": "sealights excersise",
+		"description": "These are the tests for all APIs, including the bonus\n\nEach test title describes what the test is for",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8731251"
+	},
+	"item": [
+		{
+			"name": "check if server is running",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.jsonBody(({",
+							"    \"message\": \"Server working fine\"",
+							"}))",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all people",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.jsonBody()",
+							"});",
+							"pm.test(\"Content test\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].name).to.eql(\"person1\");",
+							"    pm.expect(responseJson[1].age).to.eql(23);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/People",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"People"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all employees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.jsonBody()",
+							"});",
+							"pm.test(\"Content test\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].name).to.eql(\"Employee1\");",
+							"    pm.expect(responseJson[1].salary).to.eql(13000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"added\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":9,\n    \"name\":\"person\",\n    \"age\":13,\n    \"salary\":15000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/add",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check if added with get request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.jsonBody();",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/9",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check if employee is added to employee list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.jsonBody()",
+							"});",
+							"pm.test(\"Content test\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[2].id).to.eql(9);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"Employee deleted\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/9",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete what's already deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(404);",
+							"    pm.response.to.have.body(\"Not found\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/9",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get after deleting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(404);",
+							"    pm.response.to.have.body(\"Not found\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/9",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add, bad request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.have.body('\"name\" must be a string');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":9,\n    \"name\":6,\n    \"age\":13,\n    \"salary\":15000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/add",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
