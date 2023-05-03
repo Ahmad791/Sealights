@@ -1,6 +1,5 @@
 import express, { Application, Request, Response } from "express";
 import Joi from "joi";
-import { createClient } from "redis";
 import { Employee } from "./classes/ClassEmployee";
 import { Logger } from "./classes/ClassLogger";
 import { Person } from "./classes/ClassPerson";
