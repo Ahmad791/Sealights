@@ -1,10 +1,25 @@
 import express, { Application, Request, Response } from "express";
+//import * as session from "express-session";
 import Joi from "joi";
+import * as redis from 'redis';
+import * as connectRedis from "connect-redis";
 import { Employee } from "./classes/ClassEmployee";
 import { Logger } from "./classes/ClassLogger";
 import { Person } from "./classes/ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
+
+const { REDIS_URL = 'redis://localhost:6000' } = process.env;
+const options = {
+    legacyMode: true,
+    url: REDIS_URL,
+}
+
+const client = redis.createClient(options);
+client.connect();
+client.on('error', err => { 
+    console.error('redis error: ' + err);
+});
 
 
 // Every API sends the parameters to other functions as sting and it gets changed there to
@@ -31,7 +46,7 @@ app.get("/", // checking if the server is live
     async (req: Request, res: Response): Promise<Response> => {
         Logger.info("Pulse checked, live for "+(Date.now()-start)/1000+" seconds and server working fine")
         return res.status(200).send({
-            message: "Server working fine",
+            message: "Server working fine!!"+", The redis server is "+client.isReady,
         });
     }
 );
