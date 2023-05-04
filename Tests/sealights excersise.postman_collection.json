@@ -17,7 +17,7 @@
 							"pm.test(\"Status test\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    pm.response.to.have.jsonBody(({",
-							"    \"message\": \"Server working fine\"",
+							"    \"message\": \"Server working fine!!, The redis server is connected\"",
 							"}))",
 							"});"
 						],
@@ -66,8 +66,8 @@
 							"});",
 							"pm.test(\"Content test\", function () {",
 							"    const responseJson = pm.response.json();",
-							"    pm.expect(responseJson[0].name).to.eql(\"person1\");",
-							"    pm.expect(responseJson[1].age).to.eql(23);",
+							"    pm.expect(responseJson[0].name).to.eql(\"Person2\");",
+							"    pm.expect(responseJson[1].age).to.eql(21);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -159,8 +159,50 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status test\", function () {",
-							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.status(201);",
 							"    pm.response.to.have.body(\"added\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":9,\n    \"name\":\"person\",\n    \"age\":13,\n    \"salary\":15000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5031/Employees/add",
+					"host": [
+						"localhost"
+					],
+					"port": "5031",
+					"path": [
+						"Employees",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add same employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"already exists\");",
 							"});"
 						],
 						"type": "text/javascript"

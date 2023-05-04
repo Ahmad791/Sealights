@@ -1,5 +1,4 @@
 import express, { Application, Request, Response } from "express";
-//import * as session from "express-session";
 import Joi from "joi";
 import * as redis from 'redis';
 import { Employee } from "./classes/ClassEmployee";
@@ -119,7 +118,7 @@ app.post("/People/add", //add specific employee
         const x=await addById(JSON.stringify(req.body),"People",addPersonSchema);
         if(x.code==404){
             client.hSet("People",JSON.stringify(req.body.id),JSON.stringify(new Person(req.body.name,req.body.age,req.body.id)))
-            x.code=200;
+            x.code=201;
             if(await client.dbSize()>=bufferSize) Logger.warn("Size is "+client.dbSize());
         }
         return res.status(x.code).send(x.message);
@@ -146,7 +145,7 @@ app.post("/Employees/add", //add specific employee
         const x=await addById(JSON.stringify(req.body),"Employees",addEmployeeSchema);
         if(x.code==404){
             client.hSet("Employees",JSON.stringify(req.body.id),JSON.stringify(new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++)));
-            x.code=200;
+            x.code=201;
             if(await client.dbSize()>=bufferSize) Logger.warn("Size is "+client.dbSize());
         }
         return res.status(x.code).send(x.message);
