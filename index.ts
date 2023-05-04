@@ -31,7 +31,7 @@ app.get("/", // checking if the server is live
     async (req: Request, res: Response): Promise<Response> => {
         Logger.info("Pulse checked, live for "+(Date.now()-start)/1000+" seconds and server working fine")
         return res.status(200).send({
-            message: "Server working fine" + " redis is " +redisClient.isReady,
+            message: "Server working fine"
         });
     }
 );
@@ -101,7 +101,7 @@ app.post("/People/add", //add specific employee
         const x=addById(JSON.stringify(req.body),People,addPersonSchema);
         if(x.code==404){
             People.set(parseInt(req.body.id),new Person(req.body.id,req.body.name,req.body.age));
-            x.code=200;
+            x.code=201;
             if(People.size>=bufferSize) Logger.warn("People size is "+People.size);
         }
         return res.status(x.code).send(x.message);
@@ -128,7 +128,7 @@ app.post("/Employees/add", //add specific employee
         const x=addById(JSON.stringify(req.body),Employees,addEmployeeSchema);
         if(x.code==404){
             Employees.set(parseInt(req.body.id),new Employee(req.body.name,req.body.age,req.body.id,req.body.salary,Ecount++));
-            x.code=200;
+            x.code=201;
             if(Employees.size>=bufferSize) Logger.warn("Employees size is "+Employees.size);
         }
         return res.status(x.code).send(x.message);
