@@ -75,3 +75,12 @@ I've already modefied the script in package.json, to start the server run:
 IMPORTANT NOTE: All APIs outside of the pulse checking won't work because the project works with redis database.
 
 The default port is 5031 (chose it randomly so it will probably won't be in use), however you can change it by changing the environment "PORT" variable.
+
+## For server without redis
+I mad a branch called server-without-redis-and-docker, there the command 
+
+    npm start
+
+will run the server completely without redis, the data is saved in hash map instead.
+
+note: one of the test cases of postman will fail, but that's just because of the order change.
