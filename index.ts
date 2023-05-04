@@ -1,16 +1,11 @@
 import express, { Application, Request, Response } from "express";
 import Joi from "joi";
-import { createClient } from "redis";
 import { Employee } from "./classes/ClassEmployee";
 import { Logger } from "./classes/ClassLogger";
 import { Person } from "./classes/ClassPerson";
 const app: Application = express();
 const port = process.env.PORT || 5031;
 
-const url = process.env.REDIS_URL || 'redis://localhost:6111';
-const redisClient = createClient({
-    url
-});
 
 // Every API sends the parameters to other functions as sting and it gets changed there to
 // JSON when needed. They People and Employees APIs send data to the same function so no need 
