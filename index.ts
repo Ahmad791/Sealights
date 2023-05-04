@@ -83,7 +83,6 @@ async function deleteById(data:string,query:string){
         return x;
     }else
     { 
-        console.log(JSON.stringify(JSON.parse(data).id),"9",typeof(JSON.stringify(JSON.parse(data).id)),JSON.stringify(JSON.parse(data).id)==="9")
         const r=await client.hDel(query,JSON.parse(data).id);
     return x;
 }
