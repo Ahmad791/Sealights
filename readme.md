@@ -1,7 +1,38 @@
-# sealights excersise
+#Typescript server
+##Description:
+Made a Typescript server, dockerized it and connected it to a redis db, All done using docker-compose.
 
 
-This is the homework I was assigned to.
+##details:
+###Classes
+
+Class  | Fields |  Methods
+------------- | -------------
+Person: Simple class.|name: Person's name. <br />age: Person's age id: Unique number.<br />|greet(): Prints a message.<br />getAge(): returns age<br />getId(): returns id.|
+Employee: Inherets from Person class.|EmployeeId: Unique number. (There can be id and EmployeeId that are similar).<br />salary: Employee's salary.|work(): Prints a message.<br />getSalary(): return's employee's salary.|
+Logger: singleton class used for logging.||log(message): logs the message.<br />info(message): logs message as info.<br />warn(message): logs message as a warning.
+
+
+###APIs
+
+note: All data returned in JSON format, also a message indicating operation's success or failure is returned with it corresponding code.
+
+API type  | API |   Description
+------------- | -------------
+get  | `/` | checks server pulse, logs and returns a message.|
+get  | `/Employees` | returns all employees.|
+get  | `/People` | returns all people.|
+get  | `/People/:id` | returns a specific person.|
+delete  | `/People/:id` | deletes a specific person.|
+post  | `/People/:id` | adds a specific person.|
+get  | `/Employees/:id` | returns a specific employee.|
+delete  | `/Employees/:id` | deletes a specific employee.|
+post  | `/Employees/:id` | adds a specific employee.|
+
+    
+    
+    
+    
 
 ## Running the full project: 
 After dockerizing it, you can simply run the entire project using
