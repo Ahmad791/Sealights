@@ -8,9 +8,9 @@ Made a Typescript server, dockerized it and connected it to a redis db, All done
 
 Class  | Fields |  Methods
 --- | --- | ---
-Person: Simple class.|name: Person's name. <br />age: Person's age id: Unique number.<br />|greet(): Prints a message.<br />getAge(): returns age<br />getId(): returns id.
-Employee: Inherets from Person class.|EmployeeId: Unique number. (There can be id and EmployeeId that are similar).<br />salary: Employee's salary.|work(): Prints a message.<br />getSalary(): return's employee's salary.
-Logger: singleton class used for logging.||log(message): logs the message.<br />info(message): logs message as info.<br />warn(message): logs message as a warning.
+Person: Simple class.|- name: Person's name. <br />- age: Person's age <br />- id: Unique number.|- greet(): Prints a message.<br />- getAge(): returns age. <br />- getId(): returns id.
+Employee: Inherets from Person class.|- EmployeeId: Unique number. (There can be id and EmployeeId that are similar).<br />- salary: Employee's salary.|- work(): Prints a message.<br />- getSalary(): return's employee's salary.
+Logger: singleton class used for logging.||- log(message): logs the message.<br />- info(message): logs message as info.<br />- warn(message): logs message as a warning.
 
 
 ### APIs
